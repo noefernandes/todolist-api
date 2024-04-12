@@ -7,6 +7,7 @@ import (
 	"todolist-api/handlers"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -17,6 +18,16 @@ func main() {
 	}
 
 	r := chi.NewRouter()
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:8080"},
+		AllowCredentials: true,
+		// Enable Debugging for testing, consider disabling in production
+		Debug: true,
+	})
+
+	r.Use(c.Handler)
+
 	r.Post("/", handlers.Create)
 	r.Put("/{id}", handlers.Update)
 	r.Delete("/{id}", handlers.Delete)
